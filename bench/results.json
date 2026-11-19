@@ -1,0 +1,54 @@
+[
+  {
+    "system": {
+      "cpu": "11th Gen Intel Core i3-1115G4 @ 3.00GHz",
+      "cores": 4,
+      "ram_gb": 19.3,
+      "os": "Ubuntu 22.04.5 LTS",
+      "python": "3.10.12",
+      "runtime": "litert-lm-api 0.19.0",
+      "backend": "cpu",
+      "threads": "auto",
+      "model": "gemma-4-E2B-it.litertlm",
+      "model_gb": 2.59,
+      "context": 8192,
+      "runs": 3,
+      "date": "2026-11-19"
+    },
+    "load": 0.3478223040001467,
+    "reload": 0.3323001919998205,
+    "rss_loaded": 466.05859375,
+    "rss_peak": 2451.35546875,
+    "rss_idle": 16.67578125,
+    "media": null,
+    "scenarios": [
+      {
+        "ttft": 1.1768293377499999,
+        "prefill_tokens": 35,
+        "prefill_tps": 35.843296968536876,
+        "decode_tokens": 66,
+        "decode_tps": 4.780238060941318,
+        "total": 14.973246325000218,
+        "name": "Short chat"
+      },
+      {
+        "ttft": 17.70508915375,
+        "prefill_tokens": 1971,
+        "prefill_tps": 112.73056276258554,
+        "decode_tokens": 203,
+        "decode_tps": 4.526483971970293,
+        "total": 62.337091557999884,
+        "name": "Document Q&A (~1.5k tokens)"
+      },
+      {
+        "ttft": 37.135425610750005,
+        "prefill_tokens": 4053,
+        "prefill_tps": 109.78669726460186,
+        "decode_tokens": 41,
+        "decode_tps": 4.722353532893195,
+        "total": 45.88240321600097,
+        "name": "Long context (~4k tokens)"
+      }
+    ]
+  }
+]
