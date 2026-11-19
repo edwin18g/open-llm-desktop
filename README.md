@@ -1,73 +1,117 @@
-# EK Light LLM
+# Open LLM Desktop: offline AI chat app with Gemma 4, MCP plugins and voice (Linux)
 
-Offline desktop chat app for **Gemma 4 E2B** running on **LiteRT-LM** (`litert-lm-api`), shown in a Chrome/Chromium app window served from a local web server (`server.py`, 127.0.0.1 only). Set `EK_BROWSER=chromium` to pick a browser; without Chrome/Chromium it opens in the default browser.
+**Run a private ChatGPT / Claude Desktop–style assistant fully offline on your own PC.** Open LLM Desktop (EK Light LLM) runs Google's **Gemma 4 E2B** locally with **LiteRT-LM**, with no cloud, no API key and no GPU required. It connects to any **MCP (Model Context Protocol) server** as a plugin, reads your files, browses the web, talks in **English and Tamil voice**, and even makes videos.
 
-## Run
+![Platform](https://img.shields.io/badge/platform-Linux-blue) ![Model](https://img.shields.io/badge/model-Gemma%204%20E2B-orange) ![Runtime](https://img.shields.io/badge/runtime-LiteRT--LM-green) ![MCP](https://img.shields.io/badge/MCP-client-purple) ![Offline](https://img.shields.io/badge/works-offline-success)
+
+<!-- Add a screenshot or GIF here: it is the biggest single boost for stars. Example:
+![Open LLM Desktop chatting with Gemma 4 offline, with MCP plugins attached](docs/screenshot.png) -->
+
+## Why Open LLM Desktop?
+
+- **100% local and private.** Chats, files and the model stay on your machine. Works without internet after the one-time model download.
+- **Light.** Gemma 4 E2B (~2.6 GB) runs on an ordinary laptop CPU. After 10 idle minutes the model unloads to about 75 MB and reloads in under a second.
+- **MCP plugins like Claude Desktop.** One-click Files, Web Search, Browser, GitHub, MySQL, SQLite, Git, Notion, Memory and more, or any MCP server URL or command (stdio, streamable HTTP, SSE, OAuth).
+- **Voice chat in English and Tamil**, offline (Whisper + Piper TTS).
+- **Free and open source.** No subscription, no account.
+
+## Quick start
 
 ```bash
-cd /var/www/html/ek-light-llm
+git clone https://github.com/edwin18g/open-llm-desktop.git
+cd open-llm-desktop
 ./run.sh                # first run: creates .venv and installs deps (~150 MB)
-./install-desktop.sh    # optional: adds "EK Light LLM" to your app menu
+./install-desktop.sh    # optional: adds the app to your applications menu
 ```
 
-On first launch click **Download Gemma 4 E2B** (~2.6 GB from `litert-community/gemma-4-E2B-it-litert-lm`, resumable). It's saved to `models/` and loads automatically. You can also point it at any existing `.litertlm` file via **Choose file…**.
+On first launch click **Download Gemma 4 E2B** (~2.6 GB from `litert-community/gemma-4-E2B-it-litert-lm`, resumable). It loads automatically. You can also point it at any existing `.litertlm` model file via **Choose file…**.
+
+Or build a Debian/Ubuntu package: `packaging/build-deb.sh 1.5.0`, then install `dist/ek-light-llm_1.5.0_all.deb`.
+
+**Requirements:** Linux (tested on Ubuntu), Python 3.10+, Chrome or Chromium (any browser works). Optional: Node.js for npm-based MCP servers, `ffmpeg` for video.
 
 ## Features
-- Streaming replies, Stop button (`cancel_process`), New chat
-- CPU / GPU backend (GPU falls back to CPU automatically), thread count, context size
-- Temperature / top-p / top-k, system prompt
-- Markdown + code blocks with copy, light/dark theme
-- Settings saved to `~/.config/ek-light-llm/config.json`
 
-## Features
-- **Chat history**: every chat is saved (`~/.local/share/ek-light-llm/chats.db`). The sidebar groups chats by date and has Starred; each chat can be renamed, starred, moved to a project, exported to Markdown or deleted. **Ctrl+K** searches titles and message text.
-- **Projects**: shared instructions plus knowledge files (PDF, DOCX, XLSX, text, code) used in every chat in the project.
-- **Attachments**: the paperclip, drag-and-drop or paste. Text, code, PDF, DOCX, XLSX and CSV are read as text; images (and audio) go to Gemma's vision/audio encoders, which load only when first needed.
-- **Light on memory**: after 10 idle minutes the model is unloaded (about 75 MB left in use) and reloads in under a second on the next message. Change with `EK_IDLE_UNLOAD=<seconds>` (0 turns it off).
-- **Artifacts**: HTML or SVG answers open in a side panel with Preview and Code tabs, plus copy and download.
-- **Messages**: edit and resend (or press ↑ in an empty input), regenerate, copy, stop (Esc). Markdown, tables and syntax-highlighted code with copy buttons.
-- **Extended thinking** toggle (shows the thought process), **response styles** (Normal, Concise, Explanatory, Formal), a context-window meter, and light/dark theme.
-- **Shortcuts**: Ctrl+N new chat · Ctrl+K search · Ctrl+B sidebar · Ctrl+, settings · Esc stop.
+### Chat
+- Streaming replies with stop (Esc), edit and resend, regenerate, copy
+- Markdown, tables and syntax-highlighted code, light/dark theme
+- **Extended thinking** toggle, response styles (Normal, Concise, Explanatory, Formal), context-window meter
+- CPU / GPU backend (GPU falls back to CPU), threads, context size, temperature / top-p / top-k, system prompt
+- **Artifacts:** HTML or SVG answers open in a side panel with Preview and Code tabs
+- Shortcuts: Ctrl+N new chat · Ctrl+K search · Ctrl+B sidebar · Ctrl+, settings · Esc stop
 
-## Inline browser
-The globe button at the top of a chat opens a browser panel beside it, and links in answers open there too. It is a hidden Chrome (its own profile, so sign-ins stay separate from your normal Chrome) shown live: click, scroll and type in it as usual; the arrow button opens the page in Chrome. When the **Browser** plugin is attached, Gemma drives this same Chrome, so the panel shows what it does and each step's tool card keeps a screenshot. Like any Chrome debugging port, it listens on 127.0.0.1, where other programs running as you could connect to it.
+### Chat history and projects
+- Every chat is saved locally (SQLite), grouped by date, with starring, renaming, search and Markdown export
+- **Projects:** shared instructions plus knowledge files (PDF, DOCX, XLSX, text, code) used in every chat in the project
 
-## Plugin notes
-Each plugin's details page has **Notes for Gemma**: facts Gemma reads with every question while that plugin is attached (for example, which list "leads" means).
+### Attachments and vision
+- Paperclip, drag-and-drop or paste. Text, code, PDF, DOCX, XLSX and CSV are read as text
+- Images and audio go to Gemma's vision/audio encoders, loaded only when first needed
 
-## Video from JSON
-Install **Video Maker** from the Plugins page and attach it to ask Gemma for a video, or run it directly: `.venv/bin/python servers/video_server.py input.json -o out.mp4`. Plugin videos are saved in `~/Videos/EK Light`. The JSON format is at the top of [servers/video_server.py](servers/video_server.py). It needs `ffmpeg`.
+### MCP plugins (Model Context Protocol)
+Plugins are MCP servers and work like attachments: Gemma only sees the tools of the plugins you attach to a chat (click **+** or type **@**).
 
-## Tamil voice
-Settings > Voice > Voice language > தமிழ். The next time you start voice mode it offers a one-time download of about 1 GB: Whisper "small" hears the Tamil (Gemma's own hearing garbled most of it), Gemma answers the text, and a community Piper voice (`ta_IN-roja-medium`) speaks. It all runs offline after the download and uses about 2.6 GB of RAM during a voice chat.
+- **Catalog:** Files, Web Fetch, Web Search, Brave Search, GitHub, Time, MySQL, SQLite, Git, Browser (Playwright), Notion, Memory, Step-by-step, Video Maker
+- **+ Add custom:** any MCP server URL (with headers or OAuth sign-in) or local command (with env vars)
+- **Files** (built in, no Node.js): list, read, search, write, edit, move, copy, delete, only inside the folders you choose. Deletes go to the Trash and ask Allow/Deny first
+- **Web Search** (built in, no API key): Bing, Wikipedia and Google News, reading the best pages
+- **Tool approval:** run automatically or ask before each call; destructive tools always ask
+- **Plugin notes:** facts Gemma reads with every question while that plugin is attached
+- Config is `~/.config/ek-light-llm/mcp_servers.json` in **Claude Desktop format**, so existing configs work
 
-## Plugins (MCP)
-Plugins are MCP servers. They work like attachments: Gemma only sees the tools of the plugins you attach to a chat.
+Tip for a 2B model: attach only what the task needs, and keep context at 8192+ tokens.
 
-- **Plugins** page: search, see what's installed (green = connected), and click **+** to install from the catalog (Files, Web Fetch, Web Search, Brave Search, GitHub, Time, MySQL, SQLite, Git, Browser, Notion, Memory, Step-by-step). **+ Add custom** takes any MCP server URL (with headers) or local command (with env vars).
-- **Web Search** is built in and needs no key: it searches Bing, Wikipedia and Google News and reads the best pages. Your searches go to those sites. For a paid-grade source, use **Brave Search** with an API key.
-- **In chat**: click **+** or type **@** to attach plugins. They show as chips above the input and stay attached until you remove them or start a new chat. Attaching or removing one keeps the conversation.
-- **Files** (built in, no Node.js): list, tree, read, search names/text, file info, write, append, edit (exact find-and-replace), create folder, move/rename, copy, delete file, delete folder. It only works inside the folders you choose. Deletes go to the Ubuntu Trash (restorable) and always ask Allow/Deny unless you turn that off in Settings. Access can be read & write, read only, or permanent delete.
-- Click an installed plugin to turn single tools on or off, reconnect, or uninstall it.
-- **Settings → Tool calls**: run automatically, or ask before each call (Allow/Deny in the chat).
-- Everything is stored in `~/.config/ek-light-llm/mcp_servers.json` (Claude Desktop format). You can edit it under Settings → Edit MCP config.
+### Inline browser
+The globe button opens a live browser panel beside the chat (a separate headless Chrome profile). When the **Browser** plugin is attached, Gemma drives that same Chrome, so you watch what it does, with a screenshot saved on each step's tool card.
 
-Tips for a 2B model: attach only what the task needs, and keep context at 8192+ tokens.
+### Voice (English and Tamil)
+Settings > Voice > Voice language. Tamil uses a one-time ~1 GB download: Whisper "small" for speech recognition and a Piper voice (`ta_IN-roja-medium`) for replies, all offline afterwards.
+
+### Video from JSON
+Install **Video Maker** and ask Gemma for a video, or run `.venv/bin/python servers/video_server.py input.json -o out.mp4`. Scenes with text, images, clips, music and spoken narration. Needs `ffmpeg`.
+
+## How it compares
+
+| | Open LLM Desktop | Cloud chat apps | Ollama + web UI |
+|---|---|---|---|
+| Runs offline | ✅ | ❌ | ✅ |
+| No API key or account | ✅ | ❌ | ✅ |
+| MCP plugins built in | ✅ | Some | Add-ons |
+| Tamil voice | ✅ | Partly | ❌ |
+| One-command setup | ✅ | n/a | Two installs |
+
+## FAQ
+
+**Does it need a GPU?** No. It runs on the CPU, and uses the GPU if you choose it and it's available.
+
+**Is my data sent anywhere?** No. Only plugins you attach (for example Web Search) reach the internet.
+
+**Can I use another model?** Any `.litertlm` file can be loaded with **Choose file…**.
+
+**Does it work with my Claude Desktop MCP config?** Yes, the config uses the same `mcpServers` format.
 
 ## Troubleshooting
+
 | Problem | Fix |
 |---|---|
 | `python3 -m venv` fails | `sudo apt install python3-venv` |
-| Blank window on Wayland | already forced to X11 via `QT_QPA_PLATFORM=xcb` in `run.sh` |
 | Debug the UI | `EK_DEBUG=1 ./run.sh` (opens dev tools) |
-| MCP server shows error `No such file … 'npx'`/`'uvx'` | install Node.js (`npx`) or uv (`pip install uv`) |
-| Download needs auth | `HF_TOKEN=hf_xxx ./run.sh` |
+| MCP server error `No such file … 'npx'`/`'uvx'` | install Node.js (`npx`) or uv (`pip install uv`) |
+| Model download needs auth | `HF_TOKEN=hf_xxx ./run.sh` |
+| Something went wrong | see `~/.local/share/ek-light-llm/app.log` |
 
-## Files
-- `app.py` — window, LiteRT-LM engine worker thread, model downloader
-- `mcp_client.py` — MCP connections (stdio / streamable HTTP / SSE) → LiteRT-LM tools
-- `plugins.py` — plugin catalog (one-click MCP servers)
-- `servers/fs_server.py` — built-in Files MCP server
-- `store.py` — chats, projects, attachments (SQLite)
-- `attachments.py` — file text extraction & image prep
-- `ui/index.html`, `ui/app.css`, `ui/app.js` — UI (`ui/vendor/` has marked, DOMPurify and highlight.js, bundled for offline use)
+## Project layout
+- `app.py`: LiteRT-LM engine worker, prompts, tool routing, API
+- `server.py`: local web server (127.0.0.1 only, per-launch token) and app window
+- `mcp_client.py`: MCP connections (stdio / streamable HTTP / SSE, OAuth) → LiteRT-LM tools
+- `plugins.py`: plugin catalog
+- `servers/`: built-in MCP servers (files, web search, video)
+- `store.py`: chats, projects, attachments (SQLite)
+- `attachments.py`: text extraction for PDF, DOCX, XLSX and more
+- `voice.py`: Piper TTS and Whisper speech recognition
+- `ui/`: the interface (marked, DOMPurify and highlight.js bundled for offline use)
+
+## Contributing
+Issues and pull requests are welcome. If this project is useful to you, a ⭐ helps others find it.
+
+<!-- keywords: offline AI chat, local LLM desktop app, Gemma 4, LiteRT-LM, MCP client, Model Context Protocol, private ChatGPT alternative, Claude Desktop alternative, Linux AI assistant, Tamil voice assistant -->
