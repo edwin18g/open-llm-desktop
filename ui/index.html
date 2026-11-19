@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EK Light LLM</title>
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="vendor/github-dark.min.css" id="hlDark">
+<link rel="stylesheet" href="vendor/github.min.css" id="hlLight" disabled>
+<script src="vendor/marked.min.js"></script>
+<script src="vendor/purify.min.js"></script>
+<script src="vendor/highlight.min.js"></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-side" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></symbol>
+  <symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 2v5M15 2v5M6 7h12v4a6 6 0 0 1-12 0Z"/><path d="M12 17v5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></symbol>
+  <symbol id="i-clip" viewBox="0 0 24 24"><path d="m21 11-8.5 8.5a5 5 0 0 1-7-7L14 4a3.5 3.5 0 0 1 5 5l-8.6 8.5a2 2 0 0 1-2.8-2.8L15.5 7"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3Z"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></symbol>
+  <symbol id="i-redo" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9Z"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v12M6 10l6 6 6-6M5 20h14"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1.5" fill="currentColor"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></symbol>
+  <symbol id="i-style" viewBox="0 0 24 24"><path d="M4 7V5h16v2M9 19h6M12 5v14"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"/><path d="M14 3v6h6"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+
+<aside>
+  <div class="side-top">
+    <img src="icon.svg" alt=""><b>EK Light</b>
+    <button class="ib" id="sideToggle" title="Toggle sidebar (Ctrl+B)"><svg class="i"><use href="#i-side"/></svg></button>
+  </div>
+  <button class="newchat" id="newChatBtn" title="New chat (Ctrl+N)"><span class="plus"><svg class="i"><use href="#i-plus"/></svg></span>New chat</button>
+  <button class="nav" id="navSearch" title="Search (Ctrl+K)"><svg class="i"><use href="#i-search"/></svg>Search chats</button>
+  <button class="nav" data-view="projects"><svg class="i"><use href="#i-folder"/></svg>Projects</button>
+  <button class="nav" data-view="plugins"><svg class="i"><use href="#i-plug"/></svg>Plugins<span class="badge" id="plugBadge"></span></button>
+  <div class="side-scroll" id="sideList"></div>
+  <div class="side-foot">
+    <div class="mstat" id="mstat" title="Model status"><span class="dot" id="dot"></span><span id="statusText">Starting…</span></div>
+    <button class="ib" id="themeBtn" title="Toggle theme"><svg class="i" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+    <button class="ib" data-view="settings" title="Settings (Ctrl+,)"><svg class="i"><use href="#i-gear"/></svg></button>
+  </div>
+</aside>
+
+<main>
+  <div class="col">
+    <!-- CHAT -->
+    <section class="view home" id="view-chat">
+      <div class="topbar">
+        <button class="ib hidden" id="sideOpen" title="Open sidebar (Ctrl+B)"><svg class="i"><use href="#i-side"/></svg></button>
+        <span class="crumb hidden" id="crumb"><svg class="i" style="width:15px;height:15px"><use href="#i-folder"/></svg><span id="crumbName"></span></span>
+        <button class="ttl hidden" id="chatTitle"><span id="chatTitleText"></span><svg class="i" style="width:14px;height:14px;transform:rotate(90deg)"><use href="#i-chev"/></svg></button>
+        <div class="sp"></div>
+        <button class="ib" id="browserBtn" title="Browser"><svg class="i"><use href="#i-globe"/></svg></button>
+        <div class="ctx hidden" id="ctx" title="Context window used"><svg class="ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15" fill="none" stroke="var(--line)" stroke-width="5"/><circle id="ctxArc" cx="18" cy="18" r="15" fill="none" stroke="var(--accent)" stroke-width="5" stroke-dasharray="0 100" pathLength="100" transform="rotate(-90 18 18)"/></svg><span id="ctxText"></span></div>
+      </div>
+      <div id="chat"><div class="wrap" id="msgs"></div></div>
+      <div class="hero">
+        <h2><img src="icon.svg" alt=""><span id="greet">Good evening</span></h2>
+        <div class="pjb hidden" id="heroProj"><svg class="i" style="width:14px;height:14px"><use href="#i-folder"/></svg><span></span><button class="ib" style="width:20px;height:20px" id="heroProjX"><svg class="i" style="width:12px;height:12px"><use href="#i-x"/></svg></button></div>
+      </div>
+      <footer>
+        <div class="composer" id="composer">
+          <div class="pop hidden" id="pop"></div>
+          <div class="c-atts" id="cAtts"></div>
+          <div class="c-plugs" id="cPlugs"></div>
+          <textarea id="input" rows="1" placeholder="How can I help you today?"></textarea>
+          <div class="c-bar">
+            <button class="ib" id="attachBtn" title="Attach files or images"><svg class="i"><use href="#i-clip"/></svg></button>
+            <button class="ib" id="micBtn" title="Talk to Gemma (voice mode)"><svg class="i"><use href="#i-mic"/></svg></button>
+            <button class="ib" id="plusBtn" title="Plugins (or type @)"><svg class="i"><use href="#i-plug"/></svg></button>
+            <button class="pill" id="styleBtn" title="Response style"><svg class="i" style="width:15px;height:15px"><use href="#i-style"/></svg><span id="styleName">Normal</span></button>
+            <button class="pill" id="thinkBtn" title="Extended thinking"><svg class="i" style="width:15px;height:15px"><use href="#i-bulb"/></svg>Think</button>
+            <span id="voiceState" class="voice-state hidden"></span>
+            <div class="sp"></div>
+            <button id="sendBtn" title="Send (Enter)" disabled><svg class="i"><use href="#i-send"/></svg></button>
+            <button id="stopBtn" class="hidden" title="Stop (Esc)"><svg class="i"><use href="#i-stop"/></svg></button>
+          </div>
+        </div>
+        <div class="hint" id="hint">Gemma runs on this computer. It can make mistakes, so double-check important answers.</div>
+      </footer>
+      <div class="sugg-row" id="suggRow"></div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="view hidden" id="view-projects">
+      <div class="page"><div class="inner">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+          <div><h1>Projects</h1><p class="lead">Group chats with shared instructions and knowledge files.</p></div>
+          <button class="btn primary" id="newProjBtn"><svg class="i" style="width:16px;height:16px"><use href="#i-plus"/></svg>New project</button>
+        </div>
+        <div class="pgrid" id="pgrid"></div>
+      </div></div>
+    </section>
+
+    <!-- PROJECT DETAIL -->
+    <section class="view hidden" id="view-project">
+      <div class="page"><div class="inner" style="max-width:1080px">
+        <div class="sub" style="margin-bottom:8px;cursor:pointer" id="backProjects">← All projects</div>
+        <div class="pdet">
+          <div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <h1 id="pdName" style="flex:1;outline:0" contenteditable="true" spellcheck="false"></h1>
+              <button class="ib" id="pdMenu"><svg class="i"><use href="#i-more"/></svg></button>
+            </div>
+            <div class="sub" id="pdDesc" contenteditable="true" spellcheck="false" style="outline:0;margin-bottom:18px"></div>
+            <button class="btn primary" id="pdNewChat"><svg class="i" style="width:16px;height:16px"><use href="#i-chat"/></svg>New chat in this project</button>
+            <div class="sech" style="margin-top:26px">Chats <small id="pdChatCount"></small></div>
+            <div class="card plist" style="padding:0" id="pdChats"></div>
+          </div>
+          <div>
+            <div class="card">
+              <h3>Instructions</h3><div class="sub">How Gemma should behave in this project.</div>
+              <textarea class="inp" id="pdInstr" style="margin-top:10px;min-height:120px" placeholder="e.g. Answer in Spanish. Our product is ekhool LMS…"></textarea>
+              <div class="row" style="justify-content:flex-end"><button class="btn sm" id="pdInstrSave">Save</button></div>
+            </div>
+            <div class="card">
+              <div style="display:flex;align-items:center"><h3 style="flex:1">Knowledge</h3>
+                <button class="btn sm" id="pdAddFile"><svg class="i" style="width:14px;height:14px"><use href="#i-plus"/></svg>Add</button></div>
+              <div class="meter"><i id="pdMeter"></i></div>
+              <div class="sub" id="pdMeterTxt"></div>
+              <div id="pdFiles" style="margin-top:8px"></div>
+            </div>
+          </div>
+        </div>
+      </div></div>
+    </section>
+
+    <!-- PLUGINS -->
+    <section class="view hidden" id="view-plugins">
+      <div class="page"><div class="inner">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+          <div><h1>Plugins</h1><p class="lead">Connect MCP servers so Gemma can work with your tools. Attach them in a chat with the plug button or <b>@</b>.</p></div>
+          <button class="btn primary" id="addCustomBtn"><svg class="i" style="width:16px;height:16px"><use href="#i-plus"/></svg>Add custom</button>
+        </div>
+        <div class="search"><svg class="i"><use href="#i-search"/></svg><input id="plugSearch" placeholder="Search plugins"></div>
+        <div class="sech">Installed <small id="instCount"></small></div>
+        <div class="installed" id="installed"></div>
+        <div id="catalog"></div>
+      </div></div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="view hidden" id="view-settings">
+      <div class="page"><div class="inner" style="max-width:700px">
+        <h1>Settings</h1><p class="lead">Model, behaviour and appearance.</p>
+        <div class="card">
+          <h3>Profile</h3>
+          <label class="f" for="user_name">What should Gemma call you?</label><input class="inp" id="user_name" placeholder="Your name">
+          <label class="f" for="system_prompt">Personal preferences (system prompt)</label><textarea class="inp" id="system_prompt"></textarea>
+        </div>
+        <div class="card">
+          <h3>Model</h3>
+          <div class="sub" id="modelPath" style="word-break:break-all"></div>
+          <div id="dlBox" class="hidden">
+            <div class="row"><button class="btn primary" id="dlBtn">Download Gemma 4 E2B · 2.6 GB</button></div>
+            <div class="bar hidden" id="dlBar"><i></i></div>
+            <div class="sub" id="dlText"></div>
+          </div>
+          <div class="row"><button class="btn" id="pickBtn">Choose file…</button><button class="btn primary" id="loadBtn">Load model</button></div>
+          <div class="grid2">
+            <div><label class="f" for="backend">Backend</label><select class="inp" id="backend"><option value="cpu">CPU</option><option value="gpu">GPU</option></select></div>
+            <div><label class="f" for="threads">CPU threads</label><input class="inp" id="threads" type="number" min="0" max="64" placeholder="auto"></div>
+          </div>
+          <label class="f" for="max_tokens">Context window (tokens)</label>
+          <select class="inp" id="max_tokens"><option value="4096">4,096 — lowest memory</option><option value="8192">8,192 — default</option><option value="16384">16,384 — long chats & files</option><option value="32768">32,768 — maximum (more RAM)</option></select>
+          <label class="chk"><input type="checkbox" id="vision"> Image & audio input (loads extra encoders)</label>
+          <div class="sub" style="margin-top:8px">Changing model, backend, threads, context or media reloads the model.</div>
+        </div>
+        <div class="card">
+          <h3>Voice</h3>
+          <label class="f" for="voice_language">Voice language</label>
+          <select class="inp" id="voice_language"><option value="en">English</option><option value="ta">தமிழ் (Tamil)</option></select>
+          <div class="sub" style="margin-top:8px">The language voice mode listens, replies and speaks in. Tamil downloads its voice and speech recogniser (about 1 GB, one time) the next time you start voice mode.</div>
+        </div>
+        <div class="card">
+          <h3>Generation</h3>
+          <div class="grid2">
+            <div><label class="f" for="temperature">Temperature</label><input class="inp" id="temperature" type="number" min="0" max="2" step="0.05"></div>
+            <div><label class="f" for="top_p">Top-p</label><input class="inp" id="top_p" type="number" min="0" max="1" step="0.01"></div>
+          </div>
+          <label class="f" for="top_k">Top-k</label><input class="inp" id="top_k" type="number" min="1" max="200">
+        </div>
+        <div class="card">
+          <h3>Plugins</h3>
+          <label class="f" for="tool_approval">Tool calls</label>
+          <select class="inp" id="tool_approval"><option value="auto">Run automatically</option><option value="ask">Ask before each call</option></select>
+          <label class="chk"><input type="checkbox" id="confirm_destructive"> Always confirm deletes, even when tools run automatically</label>
+          <div class="row"><button class="btn" id="mcpEditBtn">Edit MCP config (JSON)…</button></div>
+        </div>
+        <div class="card">
+          <h3>Keyboard shortcuts</h3>
+          <div id="scList"></div>
+        </div>
+        <div class="row"><button class="btn primary" id="applyBtn">Save settings</button></div>
+      </div></div>
+    </section>
+  </div>
+
+  <!-- ARTIFACT PANEL -->
+  <section id="artPanel" class="hidden">
+    <div class="ap-h">
+      <b id="artTitle">Artifact</b>
+      <div class="seg" id="artSeg"><button data-t="preview" class="on">Preview</button><button data-t="code">Code</button></div>
+      <button class="ib" id="artCopy" title="Copy"><svg class="i"><use href="#i-copy"/></svg></button>
+      <button class="ib" id="artSave" title="Download"><svg class="i"><use href="#i-down"/></svg></button>
+      <button class="ib" id="artClose" title="Close"><svg class="i"><use href="#i-x"/></svg></button>
+    </div>
+    <iframe id="artFrame" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe>
+    <pre id="artCode" class="hidden"><code></code></pre>
+  </section>
+
+  <!-- INLINE BROWSER -->
+  <section id="webPanel" class="hidden">
+    <div class="ap-h wb-h">
+      <button class="ib" id="wbBack" title="Back"><svg class="i"><use href="#i-back"/></svg></button>
+      <button class="ib" id="wbFwd" title="Forward"><svg class="i"><use href="#i-chev"/></svg></button>
+      <button class="ib" id="wbReload" title="Reload"><svg class="i"><use href="#i-redo"/></svg></button>
+      <input class="inp" id="wbUrl" placeholder="Search or type a web address" spellcheck="false">
+      <select class="inp hidden" id="wbTabs" title="Tabs"></select>
+      <button class="ib" id="wbExt" title="Open in Chrome"><svg class="i"><use href="#i-ext"/></svg></button>
+      <button class="ib" id="wbClose" title="Close"><svg class="i"><use href="#i-x"/></svg></button>
+    </div>
+    <div id="wbView" tabindex="0"><img id="wbImg" alt=""><div id="wbMsg" class="wb-msg hidden"></div></div>
+  </section>
+</main>
+
+<!-- modals -->
+<div class="modal hidden" id="mSearch"><div class="box" id="searchBox">
+  <div class="search"><svg class="i"><use href="#i-search"/></svg><input id="searchInput" placeholder="Search chats…"></div>
+  <div id="searchRes"></div>
+</div></div>
+
+<div class="modal hidden" id="mPrompt"><div class="box">
+  <div class="mh"><h2 id="mpTitle"></h2></div>
+  <div id="mpBody"></div>
+  <div class="merr" id="mpErr"></div>
+  <div class="row" style="justify-content:flex-end"><button class="btn" data-close>Cancel</button><button class="btn primary" id="mpOk">OK</button></div>
+</div></div>
+
+<div class="modal hidden" id="mViewer"><div class="box wide" id="viewer">
+  <div class="mh"><h2 id="vwTitle" style="flex:1"></h2><button class="ib" data-close><svg class="i"><use href="#i-x"/></svg></button></div>
+  <div id="vwBody"></div>
+</div></div>
+
+<div class="modal hidden" id="mInstall"><div class="box">
+  <div class="mh"><div id="miTile"></div><div><h2 id="miTitle"></h2><div class="sub" id="miDesc"></div></div></div>
+  <div id="miFields"></div>
+  <div class="note" id="miNeeds"></div>
+  <div class="merr" id="miErr"></div>
+  <div class="row" style="justify-content:flex-end"><button class="btn" data-close>Cancel</button><button class="btn primary" id="miGo">Install</button></div>
+</div></div>
+
+<div class="modal hidden" id="mDetail"><div class="box">
+  <div class="mh"><div id="mdTile"></div><div style="flex:1"><h2 id="mdTitle"></h2><div class="sub" id="mdStatus" style="display:flex;gap:6px;align-items:center"></div></div></div>
+  <div class="merr" id="mdErr"></div>
+  <div class="sub" style="margin-top:4px">Tools the model may use</div>
+  <div class="tools-list" id="mdTools"></div>
+  <label class="f" for="mdNotes" style="margin-top:12px">Notes for Gemma</label>
+  <textarea class="inp" id="mdNotes" rows="3" placeholder="Facts that help Gemma use this plugin, e.g. “Leads usually means the lead book (lead_book_lead). Leave means the Leave module.”"></textarea>
+  <div class="sub" style="margin-top:4px">Gemma reads these whenever this plugin is attached. Saved when you leave the box.</div>
+  <div class="row" style="justify-content:space-between">
+    <button class="btn danger" id="mdRemove">Uninstall</button>
+    <div style="display:flex;gap:8px"><button class="btn" id="mdReconnect">Reconnect</button><button class="btn primary" id="mdUse">Use in chat</button></div>
+  </div>
+</div></div>
+
+<div class="modal hidden" id="mCustom"><div class="box">
+  <div class="mh"><div><h2>Add custom plugin</h2><div class="sub">Any MCP server: remote URL or a local command.</div></div></div>
+  <label class="f">Type</label>
+  <div class="seg" id="mcKind"><button data-k="url" class="on">Remote URL</button><button data-k="command">Local command</button></div>
+  <label class="f" for="mcName">Name</label><input class="inp" id="mcName" placeholder="e.g. jenconnect">
+  <label class="f" for="mcValue" id="mcValueLbl">Server URL</label><input class="inp" id="mcValue" placeholder="https://example.com/mcp">
+  <label class="f" for="mcExtra" id="mcExtraLbl">Headers (optional, one per line)</label><textarea class="inp" id="mcExtra" placeholder="Authorization: Bearer YOUR_TOKEN"></textarea>
+  <div class="merr" id="mcErr"></div>
+  <div class="row" style="justify-content:flex-end"><button class="btn" data-close>Cancel</button><button class="btn primary" id="mcGo">Add plugin</button></div>
+</div></div>
+
+<div class="modal hidden" id="mJson"><div class="box wide">
+  <div class="mh"><div><h2>MCP config</h2><div class="sub">Claude Desktop format. Installed plugins appear here too.</div></div></div>
+  <textarea class="inp" id="mcpText" spellcheck="false" style="min-height:340px;font:12.5px/1.5 var(--mono)"></textarea>
+  <div class="merr" id="mcpErr"></div>
+  <div class="row" style="justify-content:flex-end"><button class="btn" data-close>Cancel</button><button class="btn primary" id="mcpSave">Save &amp; reconnect all</button></div>
+</div></div>
+
+<div id="toast"></div>
+<input type="file" id="fileInput" multiple class="hidden">
+<script src="app.js"></script>
+<script src="voice.js"></script>
+<script src="browser.js"></script>
+</body>
+</html>

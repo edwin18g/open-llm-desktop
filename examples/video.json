@@ -1,0 +1,9 @@
+{
+  "title": "Welcome",
+  "transition": "fade",
+  "scenes": [
+    {"title": "Welcome", "text": "Made from JSON", "duration": 3, "background": "#7c3aed"},
+    {"title": "வணக்கம்", "text": "தமிழ் காணொளி", "narration": "வணக்கம், இது ஒரு தமிழ் காணொளி.", "background": "#0f766e"},
+    {"title": "Thank you", "narration": "Thanks for watching.", "background": "#1d4ed8"}
+  ]
+}
